@@ -11,14 +11,15 @@ module.exports = {
         if(err){
           console.log('There was an error retrieving information from the database.');
         }
+        console.log(results, 'from models');
         callback(results);
       });
     }, // a function which produces all the messages
     post: function (params, callback) {
-      var queryString = 'INSERT INTO messages (userID, msgTxt, roomname) VALUES (?, ?, ?)';
+      var queryString = 'INSERT INTO messages (userID, msgTxt, roomname) VALUES ((SELECT userID FROM users WHERE username = ? LIMIT 1), ?, ?)';
       db.query(queryString, params, function(err, results){
         if(err){
-          console.log('There was an error adding information to the database.');
+          console.log('There was an error adding information to the database. MODELS MESSAGES');
         }
         callback(results);
       });
@@ -40,8 +41,9 @@ module.exports = {
       var queryString = 'INSERT INTO users (username) VALUES (?)';
       db.query(queryString, function(err, results){
         if(err){
-          console.log('There was an error adding information to the database.');
+          console.log('There was an error adding information to the database. MODELS USERS');
         }
+
         callback(results);
       });
     }
